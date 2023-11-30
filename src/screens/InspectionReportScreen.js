@@ -26,7 +26,20 @@ const InspectionReportScreen = ({ route, navigation }) => {
   const { report } = route.params;
   const [images, setImages] = useState([]);
   const [textFields, setTextFields] = useState([]);
+  const removeLastPhoto = () => {
+    if (images.length > 1) {
+      setImages(images.slice(0, -1));
+    }
+    else{
+      setImages([]);
+    }
+  };
 
+  const removeLastTextField = () => {
+    if (textFields.length > 0) {
+      setTextFields(textFields.slice(0, -1));
+    }
+  };
   const selectPhotoTapped = () => {
     const options = {
       mediaType: 'photo',
@@ -92,6 +105,7 @@ const InspectionReportScreen = ({ route, navigation }) => {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
+          contenttype: 'multipart/form-data', 
           authorization: `Bearer ${token}`,
         },
         body: formData,
@@ -99,47 +113,72 @@ const InspectionReportScreen = ({ route, navigation }) => {
   
       const responseJson = await response.json();
       console.log(responseJson);
-      Alert.alert('הצלחה', 'הדוח עודכן בהצלחה');
+      Alert.alert('הצלחה', 'הדוח עודכן בהצלחה',responseJson);
       navigation.navigate('AssignedInspections');
     } catch (error) {
       console.error('There was an error submitting the report: ', error);
       Alert.alert('שגיאה', 'הייתה בעיה בעדכון הדוח, אנא נסה שנית');
     }
   };
-  
-  
+
   return (
     <ImageBackground source={require('../assets/ses.png')} style={styles.background}>
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>דוח ביקור </Text>
-      <TouchableOpacity onPress={selectPhotoTapped} style={styles.button}>
-        <Text style={styles.buttonText}>הוסף תמונות</Text>
-      </TouchableOpacity>
-      <View style={styles.imageContainer}>
-        {images.map((image, index) => (
-          <Image key={index} style={styles.image} source={image} />
+      <ScrollView style={styles.container}>
+        <Text style={styles.title}>דוח ביקור </Text>
+  
+        {/* Button to Add Photos */}
+        <TouchableOpacity onPress={selectPhotoTapped} style={styles.button}>
+          <Text style={styles.buttonText}>הוסף תמונות</Text>
+        </TouchableOpacity>
+  
+        {/* Display Photos */}
+        <View style={styles.imageContainer}>
+  {images.map((image, index) => {
+    // Check if the image URI is valid before rendering
+    if (image && image.uri) {
+      return (
+        <Image key={index} style={styles.image} source={image} />
+      );
+    }
+    return null; // Return null if the image URI is not valid
+  })}
+</View>
+        {/* Button to Remove Last Photo */}
+        {images.length >= 1 && (
+          <TouchableOpacity onPress={removeLastPhoto} style={styles.buttonremove}>
+            <Text style={styles.buttonText}>הסר תמונה אחרונה</Text>
+          </TouchableOpacity>
+        )}
+  
+        {/* Display Text Fields */}
+        {textFields.map((field, index) => (
+          <View key={index} style={styles.textFieldContainer}>
+            <TextInput
+              style={styles.textField}
+              onChangeText={(text) => updateTextField(index, text)}
+              value={field.text}
+              placeholder={` תיאור ${index + 1}`}
+            />
+          </View>
         ))}
-      </View>
-      {textFields.map((field, index) => (
-        <View key={index} style={styles.textFieldContainer}>
-          <TextInput
-            style={styles.textField}
-            onChangeText={(text) => updateTextField(index, text)}
-            value={field.text}
-            placeholder={` תיאור ${index + 1}`}
-          />
-        
-        
-        </View>
-      ))}
-      <TouchableOpacity onPress={addNewTextField} style={styles.button}>
-        <Text style={styles.buttonText}>הוסף תיאור</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-        <Text style={styles.buttonText}>שלח דוח</Text>
-      </TouchableOpacity>
-
-    </ScrollView>
+  
+        {/* Button to Add New Text Field */}
+        <TouchableOpacity onPress={addNewTextField} style={styles.button}>
+          <Text style={styles.buttonText}>הוסף תיאור</Text>
+        </TouchableOpacity>
+  
+        {/* Button to Remove Last Text Field */}
+        {textFields.length >= 1 && (
+          <TouchableOpacity onPress={removeLastTextField} style={styles.buttonremove}>
+            <Text style={styles.buttonText}>הסר תיאור אחרון</Text>
+          </TouchableOpacity>
+        )}
+  
+        {/* Button to Submit Report */}
+        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+          <Text style={styles.buttonText}>שלח דוח</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </ImageBackground>
   );
 };
@@ -202,6 +241,13 @@ const styles = StyleSheet.create({
     fontSize: 18, // Readable font size
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  buttonremove: {
+    backgroundColor: 'red', // Vibrant blue for primary action
+    borderRadius: 8, // Rounded corners
+    padding: 12, // Adequate padding
+    marginTop: 10, // Space above the button
+    marginBottom: 20, // Space below the button
   },
   // Add any additional styles if needed
 });

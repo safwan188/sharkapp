@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, Modal, TouchableOpacity, ScrollView, Alert ,ImageBackground,Dimensions} from 'react-native';
+import { View, Text, StyleSheet, Button, Modal, TouchableOpacity, ScrollView, Alert ,ImageBackground,Dimensions,Image} from 'react-native';
 import axios from 'axios'; // make sure to install axios with npm or yarn
 import apiExpertRequest from '../API/apiExpertRequest';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -43,39 +43,54 @@ const InspectionDetailScreen = ({ route, navigation }) => {
   return (
     <ImageBackground source={require('../assets/ses.png')} style={styles.background}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>דוח: {report.customer.name}</Text>
-        <Text style={styles.text}>עיר: {report.property.cityName}</Text>
-        <Text style={styles.text}>רחוב: {report.property.street}</Text>
-        <Text style={styles.text}>בניין מס: {report.property.propertyNumber}</Text>
-        <Text style={styles.text}>תחום: {report.subject}</Text>
-        <Text style={styles.text}>תיאור: {report.description}</Text>
   
+        {/* Text Fields Section */}
+        <View style={styles.textSection}>
+          <Text style={styles.title}>דוח: {report.customer.name}</Text>
+          <Text style={styles.text}>עיר: {report.property.cityName}</Text>
+          <Text style={styles.text}>רחוב: {report.property.street}</Text>
+          <Text style={styles.text}>בניין מס: {report.property.propertyNumber}</Text>
+          <Text style={styles.text}>תחום: {report.subject}</Text>
+          <Text style={styles.text}>תיאור: {report.description}</Text>
+        </View>
+  
+        {/* Images Section */}
+        {report.clientPhotos && report.clientPhotos.length > 0 && (
+          <View style={styles.imagesSection}>
+            {report.clientPhotos.map((photoUrl, index) => (
+              <Image key={index} source={{ uri: photoUrl }} style={styles.imageStyle} resizeMode="contain" />
+            ))}
+          </View>
+        )}
+  
+        {/* Dates Section */}
         {report.availableStartingDates?.length ? (
-          <>
-            <Text style={styles.dateText}>בחר אחד מהתאריכים הבאים:</Text>
+          <View style={styles.datesSection}>
+            <Text style={styles.text}>בחר אחד מהתאריכים הבאים:</Text>
             <View style={styles.dateContainer}>
-            {report.availableStartingDates.map((date, index) => (
-  <TouchableOpacity 
-    key={index} 
-    style={[
-      styles.dateButton, 
-      selectedDate === date && styles.selectedDateButton // Add this line
-    ]} 
-    onPress={() => setSelectedDate(date)}
-  >
-    <Text style={styles.dateButtonText}>{new Date(date).toLocaleDateString()}</Text>
-  </TouchableOpacity>
-))}
+              {report.availableStartingDates.map((date, index) => (
+                <TouchableOpacity 
+                  key={index} 
+                  style={[
+                    styles.customButton, 
+                    selectedDate === date && styles.selectedDateButton
+                  ]} 
+                  onPress={() => setSelectedDate(date)}
+                >
+                  <Text style={styles.customButtonText}>{new Date(date).toLocaleString()}</Text>
+                </TouchableOpacity>
+              ))}
             </View>
-            <Text style={styles.selectedDateText}>{`תאריך שבחרת: ${selectedDate ? new Date(selectedDate).toLocaleDateString() : 'None'}`}</Text>
+            <Text style={styles.selectedDateText}>{`תאריך שבחרת: ${selectedDate ? new Date(selectedDate).toLocaleString() : 'None'}`}</Text>
             <TouchableOpacity style={styles.customButton} onPress={confirmDate}>
               <Text style={styles.customButtonText}>שמור</Text>
             </TouchableOpacity>
-          </>
+          </View>
         ) : (
           <Text style={styles.noDatesText}>No available dates.</Text>
         )}
   
+        {/* Modal */}
         <Modal
           animationType="slide"
           transparent={true}
@@ -88,14 +103,17 @@ const InspectionDetailScreen = ({ route, navigation }) => {
               {selectedDate && <Text style={styles.modalInfoText}>{`בחרת בתאריך: ${new Date(selectedDate).toLocaleDateString()}`}</Text>}
               <TouchableOpacity
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => {setModalVisible(!modalVisible);
-                navigation.navigate('InspectionsList'); }}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  navigation.navigate('InspectionsList');
+                }}
               >
                 <Text style={styles.textStyle}>סגור</Text>
               </TouchableOpacity>
             </View>
           </View>
         </Modal>
+  
       </ScrollView>
     </ImageBackground>
   );
@@ -104,15 +122,14 @@ const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    width: width,
-    height: height,
-    resizeMode: 'cover',
+  
   },
   container: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: 20,
     paddingTop: 40,
     backgroundColor: 'rgba(255,255,255,0.8)',
+
   },
   title: {
     fontSize: 26,
@@ -123,7 +140,7 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'right',
-    fontSize: 18,
+    fontSize: 23,
     marginBottom: 15,
     color: '#333',
     lineHeight: 24,
@@ -149,7 +166,7 @@ const styles = StyleSheet.create({
   },
   dateButtonText: {
     fontSize: 16,
-    color: '#0277bd',
+    color:'black',
     textAlign: 'center',
   },
   selectedDateText: {
@@ -176,6 +193,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginTop: 20,
     alignSelf: 'center',
+    marginBottom: 40,
   },
   customButtonText: {
     color: 'white',
@@ -203,6 +221,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  imageStyle: {
+    width: width-40,
+    height: 150, // Adjust the height as needed
+    marginVertical: 10,
+    resizeMode: 'contain',
   },
   modalText: {
     marginBottom: 15,
@@ -232,6 +256,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   selectedDateButton: {
+    textColor: 'white', 
     backgroundColor: 'blue', // Or any color you want for the selected date
     // You can add other styles if needed
   },

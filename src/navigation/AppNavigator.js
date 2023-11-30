@@ -30,8 +30,8 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       {/* The MainStackNavigator contains the rest of your stack screens */}
-      <Drawer.Navigator>
-        {/* The drawer navigator contains the drawer screens */}
+      <Drawer.Navigator >
+        {/* The drawer  navigator contains the drawer screens */}
         <Drawer.Screen 
           name="Login" 
           component={LoginScreen} 
@@ -46,6 +46,7 @@ const AppNavigator = () => {
           name="InspectionsList" 
           component={InspectionsListScreen}  
           options={{ 
+            
             headerShown: true,
             title: 'דוחות פתוחות',
             headerTransparent: false,

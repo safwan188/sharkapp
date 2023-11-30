@@ -22,6 +22,7 @@ const LoginForm = ({ onLogin }) => {
         style={styles.logo}
         resizeMode="contain" // This ensures the logo is scaled properly
       />
+      <Text style={{color:'black',textAlign:'right',}}> תעודה מזהה </Text>
       <TextInput
         style={styles.input}
         onChangeText={handleUsernameChange}
@@ -32,6 +33,7 @@ const LoginForm = ({ onLogin }) => {
         onSubmitEditing={() => passwordInputRef.current.focus()}
         blurOnSubmit={false}
       />
+      <Text style={{color:'black',textAlign:'right'}}>תעודה מזהה ו 3 אחרונים בטלפון</Text>
       <TextInput
         ref={passwordInputRef}
         style={styles.input}
@@ -45,7 +47,7 @@ const LoginForm = ({ onLogin }) => {
       />
 
  <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={{color:'white',textAlign:'center'}}>התחבר</Text>
+        <Text style={{color:'white',textAlign:'center',fontSize:16}}>התחבר</Text>
       </TouchableOpacity> 
     </View>
   );
@@ -55,21 +57,23 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center', // Center items horizontally
-    padding: 30,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderRadius: 5,
+    backgroundColor: 'rgba(255, 255, 255,1)',
+    borderRadius: 15,
    borderColor: 'blue',
    borderWidth: 1,
+    padding: 20,
   },
   logo: {
-      
+    backgroundColor: 'rgba(255, 255, 255, 1)',
+    width: 180, // Set the width of your logo
+    height:140, // Set the height of your logo
+    marginBottom: 30, // Add some margin below the logo
+   borderWidth: 0,
+   
+   
+   padding: 20,
+   
     
-    width: 150, // Set the width of your logo
-    height: 120, // Set the height of your logo
-    marginBottom: 50, // Add some margin below the logo
-   
-   
-
   },
   input: {
     width: 150, // Ensure the input stretches to the width of the container
@@ -83,12 +87,12 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 75, // Ensure the button stretches to the width of the container
-    height: 40,
+    height: 30,
     borderRadius: 10,
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,
-    backgroundColor: 'blue',
+    backgroundColor: '#007bff',
     justifyContent: 'center',  },
 });
 

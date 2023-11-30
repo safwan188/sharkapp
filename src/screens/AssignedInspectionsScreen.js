@@ -19,7 +19,7 @@ const AssignedInspectionsScreen = () => {
 
         }
         catch (error) {
-          Alert.alert( 'שגיאה בטעינת הדוחות', 'אנא נסה שנית');
+          Alert.alert( 'שגיאה בטעינת הדוחות', 'אנא נסה שנית',error);
           console.error(error);
         }
         
@@ -46,7 +46,7 @@ const AssignedInspectionsScreen = () => {
     <ImageBackground source={require('../assets/ses.png')} style={styles.background}>
       {assignedInspections.length === 0 ? (
         <View style={styles.container}>
-        <Text style={styles.Text}>אין דוחות</Text>
+        <Text style={styles.Textempty}>אין דוחות</Text>
 
         </View>
         
@@ -99,6 +99,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'right',
     color: '#555', // A slightly lighter color for subtext
+    marginBottom: 4, // Consistent spacing for all items
+  },
+  Textempty: {
+    fontSize: 25,
+    textAlign: 'center',
+    color: 'black', // A slightly lighter color for subtext
     marginBottom: 4, // Consistent spacing for all items
   },
 });

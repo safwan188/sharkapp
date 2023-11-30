@@ -51,7 +51,7 @@ const renderItem = ({ item }) => (
       <ImageBackground source={require('../assets/ses.png')} style={styles.background}>
         {inspections.length === 0 ? (
           <View style={styles.container}>
-            <Text   style={styles.Text}>אין דוחות</Text>
+            <Text   style={styles.Textempty}>אין דוחות</Text>
           </View>
         ) : (
           <View style={styles.container}>
@@ -109,6 +109,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  Textempty: {
+    fontSize: 25,
+    textAlign: 'center',
+    color: 'black', // A slightly lighter color for subtext
+    marginBottom: 4, // Consistent spacing for all items
   },
 });
 
