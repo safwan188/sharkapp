@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, Alert, ImageBackground,KeyboardAvoidingView ,ScrollView} from 'react-native';
+import { View, StyleSheet, Text, Alert, ImageBackground,KeyboardAvoidingView ,ScrollView,TouchableWithoutFeedback,Keyboard} from 'react-native';
 import LoginForm from '../components/LoginForm';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -25,6 +25,7 @@ const LoginScreen = () => {
   };
 
   return (
+
     <ImageBackground source={require('../assets/ses.png')} style={styles.background}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -33,7 +34,7 @@ const LoginScreen = () => {
       >
           <View style={styles.screen}>
             <Text style={styles.title}></Text>
-            <LoginForm onLogin={handleLogin}/>
+            <LoginForm onLogin={handleLogin}  />
           </View>
       </KeyboardAvoidingView>
     </ImageBackground>
