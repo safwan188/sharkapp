@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   detailText: {
     fontSize: 18,
     color: '#555555',
-    textAlign: 'left',
+    textAlign: 'right',
     marginBottom: 5,
   },
   listContainer: {

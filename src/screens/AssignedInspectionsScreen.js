@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 16,
-    textAlign: 'left',
+    textAlign: 'right',
     color: '#555', // A slightly lighter color for subtext
     marginBottom: 4, // Consistent spacing for all items
   },

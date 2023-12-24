@@ -2,6 +2,10 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the Icon component
+
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
 import LoginScreen from '../screens/LoginScreen';
 import InspectionsListScreen from '../screens/InspectionsListScreen';
 import InspectionDetailScreen from '../screens/InspectionDetailScreen';
@@ -10,7 +14,7 @@ import InspectionReportScreen from '../screens/InspectionReportScreen';
 import LoginScreen2 from '../screens/Login2';
 import InspectionsListScreen2 from '../screens/reportlist2';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import { View, Button } from 'react-native';
+import { View, Button,Text,StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const logout = async (navigation) => {
   try {
@@ -33,28 +37,30 @@ function CustomDrawerContent(props) {
         <Button
           title="יציאה"
           onPress={() => logout(props.navigation)}
+          icon={<Icon name="logout" size={30} color="#000" />}
+
         />
       </View>
     </DrawerContentScrollView>
   );
 }
 
-const Stack = createNativeStackNavigator();
+const CustomDrawerToggle = ({ navigation }) => {
+  return (
+    <TouchableOpacity 
+      onPress={() => navigation.toggleDrawer()}
+      style={styles.menuButton}
+    >
+      <Icon name="menu" size={30} color="#000" /> 
+    </TouchableOpacity>
+  );
+};
+
+
+
 const Drawer = createDrawerNavigator();
 
-// Create a stack navigator for use within the drawer
-function MainStackNavigator() {
-  return (
-    <Stack.Navigator options={{}}>
-      
-      <Stack.Screen name="InspectionsList" component={InspectionsListScreen2}  options={{ headerShown: false ,}} />
-      <Stack.Screen name="InspectionDetails" component={InspectionDetailScreen}  options={{ headerShown: false ,}} />
-      <Stack.Screen name="AssignedInspections" component={AssignedInspectionsScreen}  options={{ headerShown: false ,}} />
-      <Stack.Screen name="InspectionReport" component={InspectionReportScreen}  options={{ headerShown: false ,}} />
-      {/* ... other stack screens */}
-    </Stack.Navigator>
-  );
-}
+
 
 // Now use the drawer navigator in the AppNavigator
 const AppNavigator = () => {
@@ -62,8 +68,18 @@ const AppNavigator = () => {
     <NavigationContainer>
       {/* The MainStackNavigator contains the rest of your stack screens */}
       <Drawer.Navigator
-      drawerContent={props => <CustomDrawerContent {...props} />
-      }
+        drawerContent={props => <CustomDrawerContent {...props} />}
+        screenOptions={({ navigation }) => ({
+          drawerPosition: 'right',
+          headerRight: () => <CustomDrawerToggle navigation={navigation} />,
+          // Optionally hide the default header left component
+          title: 'דוחות פתוחות',
+          headerStyle: {
+          },
+          headerLeft: () => null,
+          headerTitleAlign: 'center',
+
+        })}
       >
         {/* The drawer  navigator contains the drawer screens */}
         <Drawer.Screen 
@@ -125,5 +141,13 @@ const AppNavigator = () => {
     </NavigationContainer>
   );
 };
-
+const styles = StyleSheet.create({
+  menuButton: {
+    padding: 5,
+    // Add your styling for the button here
+  },
+  menuText: {
+    // Add your styling for the text or icon here
+  }
+});
 export default AppNavigator;

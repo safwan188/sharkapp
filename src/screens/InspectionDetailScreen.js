@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, Modal, TouchableOpacity, ScrollView, Alert ,ImageBackground,Dimensions,Image} from 'react-native';
+import { View, Text, StyleSheet, Button, Modal, TouchableOpacity, ScrollView, Alert, ImageBackground, Dimensions, Image } from 'react-native';
 import axios from 'axios'; // make sure to install axios with npm or yarn
 import apiExpertRequest from '../API/apiExpertRequest';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,20 +8,21 @@ const InspectionDetailScreen = ({ route, navigation }) => {
   const { report } = route.params;
   const [selectedDate, setSelectedDate] = useState(report.availableStartingDates?.[0]);
   const [modalVisible, setModalVisible] = useState(false);
-  
+
 
 
   const confirmDate = async () => {
-  
+
     if (selectedDate) {
       console.log(report._id);
       console.log(selectedDate);
       console.log(await AsyncStorage.getItem('expertId'));
+      console.log(await AsyncStorage.getItem('token'));
 
       try {
-        const response = await apiExpertRequest.createRequest( {
+        const response = await apiExpertRequest.createRequest({
           report: report._id,
-          expert:await AsyncStorage.getItem('expertId'),
+          expert: await AsyncStorage.getItem('expertId'),
           date: selectedDate,
           status: 'pending',
 
@@ -30,20 +31,22 @@ const InspectionDetailScreen = ({ route, navigation }) => {
         if (response.status === 200) {
           setModalVisible(true);
           // Optionally navigate back or refresh data
-        
+
         } else {
+          console.log(response.data.message);
           // Handle any errors according to your API's response structure
-          console.error('שגיאה ', response.data.error);
+          console.error('שגיאה ', response.data.message);
         }
       } catch (error) {
-        console.error('שגיאה ', error.message);
+        console.log(error.response.data);
+        console.error('שגיאה ', error.response.data.message);
       }
     }
   };
   return (
     <ImageBackground source={require('../assets/ses.png')} style={styles.background}>
       <ScrollView contentContainerStyle={styles.container}>
-  
+
         {/* Text Fields Section */}
         <View style={styles.textSection}>
           <Text style={styles.title}>דוח: {report.customer.name}</Text>
@@ -53,7 +56,7 @@ const InspectionDetailScreen = ({ route, navigation }) => {
           <Text style={styles.text}>תחום: {report.subject}</Text>
           <Text style={styles.text}>תיאור: {report.description}</Text>
         </View>
-  
+
         {/* Images Section */}
         {report.clientPhotos && report.clientPhotos.length > 0 && (
           <View style={styles.imagesSection}>
@@ -62,19 +65,19 @@ const InspectionDetailScreen = ({ route, navigation }) => {
             ))}
           </View>
         )}
-  
+
         {/* Dates Section */}
         {report.availableStartingDates?.length ? (
           <View style={styles.datesSection}>
             <Text style={styles.text}>בחר אחד מהתאריכים הבאים:</Text>
             <View style={styles.dateContainer}>
               {report.availableStartingDates.map((date, index) => (
-                <TouchableOpacity 
-                  key={index} 
+                <TouchableOpacity
+                  key={index}
                   style={[
-                    styles.customButton, 
+                    styles.customButton,
                     selectedDate === date && styles.selectedDateButton
-                  ]} 
+                  ]}
                   onPress={() => setSelectedDate(date)}
                 >
                   <Text style={styles.customButtonText}>{new Date(date).toLocaleString()}</Text>
@@ -89,7 +92,7 @@ const InspectionDetailScreen = ({ route, navigation }) => {
         ) : (
           <Text style={styles.noDatesText}>No available dates.</Text>
         )}
-  
+
         {/* Modal */}
         <Modal
           animationType="slide"
@@ -113,7 +116,7 @@ const InspectionDetailScreen = ({ route, navigation }) => {
             </View>
           </View>
         </Modal>
-  
+
       </ScrollView>
     </ImageBackground>
   );
@@ -122,7 +125,7 @@ const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-  
+
   },
   container: {
     flexGrow: 1,
@@ -139,7 +142,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   text: {
-    textAlign: 'left',
+    textAlign: 'right',
     fontSize: 23,
     marginBottom: 15,
     color: '#333',
@@ -166,7 +169,7 @@ const styles = StyleSheet.create({
   },
   dateButtonText: {
     fontSize: 16,
-    color:'black',
+    color: 'black',
     textAlign: 'center',
   },
   selectedDateText: {
@@ -223,7 +226,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   imageStyle: {
-    width: width-40,
+    width: width - 40,
     height: 150, // Adjust the height as needed
     marginVertical: 10,
     resizeMode: 'contain',
@@ -256,10 +259,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   selectedDateButton: {
-    textColor: 'white', 
+    textColor: 'white',
     backgroundColor: 'blue', // Or any color you want for the selected date
     // You can add other styles if needed
   },
 });
 
-    export default InspectionDetailScreen;
+export default InspectionDetailScreen;
