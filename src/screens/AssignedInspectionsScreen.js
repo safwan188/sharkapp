@@ -36,7 +36,6 @@ const AssignedInspectionsScreen = () => {
       onPress={() => navigation.navigate('InspectionReport', { report: item })}
     >
       <Text style={styles.title}>דוח: {item.customer.name}</Text>
-      <Text style={styles.title}>{item.customer.name}</Text>
       <Text style={styles.detailText}>עיר : {item.property.cityName}</Text>
       <Text style={styles.detailText}>תחום : {item.subject}</Text>
     </TouchableOpacity>
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   title: {
-    textAlign: 'right',
+    textAlign: 'center',
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333', // Darker color for better readability
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 16,
-    textAlign: 'right',
+    textAlign: 'left',
     color: '#555', // A slightly lighter color for subtext
     marginBottom: 4, // Consistent spacing for all items
   },

@@ -81,13 +81,13 @@ const styles = StyleSheet.create({
     resizeMode: 'contain', // Ensures the logo is scaled properly
   },
   input: {
-    width: '80%', // Relative width
-    height: 40,
+    width: '90%', // Relative width
+    height: 50,
     borderColor: 'black',
     borderRadius: 10,
     borderWidth: 1,
-    marginBottom: 15,
-    paddingHorizontal: 10,
+    marginBottom: 20,
+    paddingHorizontal: 18,
     textAlign: 'right',
   },
   text: {

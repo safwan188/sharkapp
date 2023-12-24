@@ -231,10 +231,14 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#007bff', // Vibrant blue for primary action
-    borderRadius: 8, // Rounded corners
+    borderRadius: 15, // Rounded corners
     padding: 12, // Adequate padding
     marginTop: 10, // Space above the button
-    marginBottom: 20, // Space below the button
+    marginBottom: 20, // Space below the 
+    marginHorizontal: 10,
+    paddingHorizontal: 40,
+    alignSelf: 'center',
+    
   },
   buttonText: {
     color: 'white', // White text for contrast

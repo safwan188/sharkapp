@@ -28,7 +28,7 @@ const LoginScreen = () => {
 
     <ImageBackground source={require('../assets/ses.png')} style={styles.background}>
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
       >
