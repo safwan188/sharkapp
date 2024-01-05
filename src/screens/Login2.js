@@ -44,11 +44,11 @@ const LoginScreen2 = () => {
       await AsyncStorage.setItem('token', response.data.token);
       await AsyncStorage.setItem('name', response.data.name);
       await AsyncStorage.setItem('expertId', response.data.expert); 
-      Alert.alert(`Welcome ${response.data.name}`);
+      Alert.alert(`ברוך הבא ${response.data.name}`);
       navigation.navigate('InspectionsList');
     } catch (error) {
       console.log(error);
-      Alert.alert('Login Failed', 'Please check your username and password');
+      Alert.alert('שגיאה', 'תבדוק שם משתמש או סיסמה');
     }
   };
 

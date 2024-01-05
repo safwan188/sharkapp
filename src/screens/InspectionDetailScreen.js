@@ -33,13 +33,12 @@ const InspectionDetailScreen = ({ route, navigation }) => {
           // Optionally navigate back or refresh data
 
         } else {
-          console.log(response.data.message);
           // Handle any errors according to your API's response structure
-          console.error('שגיאה ', response.data.message);
+          Alert.alert('שגיאה','הבקשה לא נשלחה');
         }
       } catch (error) {
-        console.log(error.response.data);
-        console.error('שגיאה ', error.response.data.message);
+        console.log(error.response.data.message);
+        Alert.alert('שגיאה', error.response.data.message);
       }
     }
   };
